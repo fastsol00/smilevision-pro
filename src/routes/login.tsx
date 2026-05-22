@@ -2,19 +2,26 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Eye, EyeOff, ShieldCheck, ArrowLeft } from "lucide-react";
+import { toast } from "sonner";
 import { Logo } from "@/components/logo";
+import { useAuthStore } from "@/lib/auth";
 
 export const Route = createFileRoute("/login")({ component: LoginPage });
 
 function LoginPage() {
   const nav = useNavigate();
+  const userEmail = useAuthStore((state) => state.user.email);
+  const validateCredentials = useAuthStore((state) => state.validateCredentials);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Auth non collegata: ingresso diretto allo workspace per ora.
+    if (!validateCredentials(email, password)) {
+      toast.error("Email o password non corrette.");
+      return;
+    }
     nav({ to: "/app/patients" });
   };
 
@@ -50,7 +57,7 @@ function LoginPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="dr.antoniomirone@gmail.com"
+                placeholder={userEmail}
                 className="h-12 w-full rounded-full bg-muted/60 px-5 text-[14px] text-foreground placeholder:text-muted-foreground/70 outline-none transition focus:bg-muted/80 focus:ring-2 focus:ring-ring/30"
                 autoComplete="email"
               />

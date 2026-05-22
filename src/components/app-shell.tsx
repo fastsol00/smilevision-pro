@@ -1,7 +1,12 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { Users, Sparkles as SparkIcon, Bell, Plus } from "lucide-react";
+import { useState } from "react";
+import { Users, Sparkles as SparkIcon, Settings, Plus, Eye, EyeOff } from "lucide-react";
+import { toast } from "sonner";
 import { Logo } from "./logo";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, useAuthStore } from "@/lib/auth";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const NAV = [
   { to: "/app/patients", label: "Pazienti", icon: Users },
@@ -10,7 +15,73 @@ const NAV = [
 
 export function AppShell({ children, topBar }: { children: React.ReactNode; topBar?: React.ReactNode }) {
   const loc = useLocation();
-  const user = getCurrentUser();
+  const user = useAuthStore((state) => state.user);
+  const storedPassword = useAuthStore((state) => state.password);
+  const updateEmail = useAuthStore((state) => state.updateEmail);
+  const updatePassword = useAuthStore((state) => state.updatePassword);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [emailDraft, setEmailDraft] = useState(user.email);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const resetSettingsFields = () => {
+    const latestUser = getCurrentUser();
+    setEmailDraft(latestUser.email);
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+    setShowCurrentPassword(false);
+    setShowNewPassword(false);
+    setShowConfirmPassword(false);
+  };
+
+  const handleOpenChange = (open: boolean) => {
+    setSettingsOpen(open);
+    if (open) {
+      resetSettingsFields();
+    }
+  };
+
+  const saveEmail = () => {
+    const normalized = emailDraft.trim().toLowerCase();
+    if (!normalized) {
+      toast.error("Inserisci un indirizzo email valido.");
+      return;
+    }
+    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized);
+    if (!isValidEmail) {
+      toast.error("L'indirizzo email non è valido.");
+      return;
+    }
+    updateEmail(normalized);
+    setEmailDraft(normalized);
+    toast.success("Email aggiornata con successo.");
+  };
+
+  const savePassword = () => {
+    if (currentPassword !== storedPassword) {
+      toast.error("La password attuale non è corretta.");
+      return;
+    }
+    if (newPassword.length < 8) {
+      toast.error("La nuova password deve avere almeno 8 caratteri.");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      toast.error("La conferma password non coincide.");
+      return;
+    }
+    updatePassword(newPassword);
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+    toast.success("Password aggiornata con successo.");
+  };
+
   return (
     <div className="min-h-screen overflow-x-hidden bg-[oklch(0.98_0.005_240)]">
       <div className="flex min-h-screen items-stretch">
@@ -46,8 +117,13 @@ export function AppShell({ children, topBar }: { children: React.ReactNode; topB
             <div className="hidden flex-1 md:block" />
             <div className="ml-auto flex items-center gap-2">
               {topBar}
-              <button className="hidden md:grid h-10 w-10 place-items-center rounded-full border border-border/70 bg-card text-muted-foreground hover:text-foreground">
-                <Bell className="h-4 w-4" />
+              <button
+                type="button"
+                onClick={() => handleOpenChange(true)}
+                className="hidden md:grid h-10 w-10 place-items-center rounded-full border border-border/70 bg-card text-muted-foreground hover:text-foreground"
+                aria-label="Apri impostazioni account"
+              >
+                <Settings className="h-4 w-4" />
               </button>
             </div>
           </header>
@@ -71,8 +147,118 @@ export function AppShell({ children, topBar }: { children: React.ReactNode; topB
           );
         })}
       </nav>
+
+      <Dialog open={settingsOpen} onOpenChange={handleOpenChange}>
+        <DialogContent className="sm:max-w-xl">
+          <DialogHeader>
+            <DialogTitle>Impostazioni account</DialogTitle>
+            <DialogDescription>
+              Aggiorna email e password. Le modifiche vengono salvate subito su questo dispositivo.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-6">
+            <section className="space-y-3 rounded-2xl border border-border/60 bg-muted/30 p-4">
+              <div>
+                <div className="text-sm font-semibold text-foreground">Email di accesso</div>
+                <div className="text-xs text-muted-foreground">Verrà usata immediatamente anche nella schermata di login.</div>
+              </div>
+              <Input
+                type="email"
+                value={emailDraft}
+                onChange={(e) => setEmailDraft(e.target.value)}
+                className="h-11 rounded-xl bg-background"
+                placeholder="nome@studio.it"
+                autoComplete="email"
+              />
+              <div className="flex justify-end">
+                <Button type="button" onClick={saveEmail} className="rounded-full">
+                  Salva email
+                </Button>
+              </div>
+            </section>
+
+            <section className="space-y-3 rounded-2xl border border-border/60 bg-muted/30 p-4">
+              <div>
+                <div className="text-sm font-semibold text-foreground">Password</div>
+                <div className="text-xs text-muted-foreground">Per confermare la modifica inserisci la password attuale.</div>
+              </div>
+
+              <PasswordField
+                label="Password attuale"
+                value={currentPassword}
+                onChange={setCurrentPassword}
+                visible={showCurrentPassword}
+                onToggleVisibility={() => setShowCurrentPassword((value) => !value)}
+                autoComplete="current-password"
+              />
+              <PasswordField
+                label="Nuova password"
+                value={newPassword}
+                onChange={setNewPassword}
+                visible={showNewPassword}
+                onToggleVisibility={() => setShowNewPassword((value) => !value)}
+                autoComplete="new-password"
+              />
+              <PasswordField
+                label="Conferma nuova password"
+                value={confirmPassword}
+                onChange={setConfirmPassword}
+                visible={showConfirmPassword}
+                onToggleVisibility={() => setShowConfirmPassword((value) => !value)}
+                autoComplete="new-password"
+              />
+
+              <DialogFooter className="pt-1">
+                <Button type="button" onClick={savePassword} className="rounded-full">
+                  Aggiorna password
+                </Button>
+              </DialogFooter>
+            </section>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
 
 export { Plus };
+
+function PasswordField({
+  label,
+  value,
+  onChange,
+  visible,
+  onToggleVisibility,
+  autoComplete,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  visible: boolean;
+  onToggleVisibility: () => void;
+  autoComplete: string;
+}) {
+  return (
+    <div className="space-y-1.5">
+      <label className="text-[13px] font-semibold text-foreground">{label}</label>
+      <div className="relative">
+        <Input
+          type={visible ? "text" : "password"}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="h-11 rounded-xl bg-background pr-11"
+          autoComplete={autoComplete}
+        />
+        <button
+          type="button"
+          onClick={onToggleVisibility}
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+          aria-label={visible ? "Nascondi password" : "Mostra password"}
+        >
+          {visible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+        </button>
+      </div>
+    </div>
+  );
+}

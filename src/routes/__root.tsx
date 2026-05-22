@@ -11,6 +11,7 @@ import {
 import { Toaster } from "@/components/ui/sonner";
 import { useStore } from "@/lib/store";
 import { seedSampleIfEmpty } from "@/lib/store";
+import { useAuthStore } from "@/lib/auth";
 
 import appCss from "../styles.css?url";
 
@@ -78,6 +79,7 @@ function RootComponent() {
   useEffect(() => {
     (async () => {
       await useStore.persist?.rehydrate();
+      await useAuthStore.persist?.rehydrate();
       seedSampleIfEmpty();
     })();
   }, []);
