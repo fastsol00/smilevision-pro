@@ -34,9 +34,14 @@ Variabili ambiente da configurare in Vercel:
 
 ## Supabase
 
-Nel codice attuale il client Supabase e' predisposto ma non ancora attivato. Prima di collegare autenticazione e database bisogna:
+Il client Supabase e' gia' presente nel progetto e si attiva automaticamente quando imposti:
+
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY`
+
+Per completare il collegamento di autenticazione e database bisogna:
 
 1. creare un progetto Supabase
-2. impostare le env pubbliche nel frontend
-3. sostituire lo stub in `src/lib/supabase/client.ts` con `createClient(...)`
-4. aggiungere schema/migrazioni se vuoi versionare anche il database
+2. impostare le env pubbliche nel frontend e in Vercel
+3. applicare la migrazione iniziale contenuta in `supabase/migrations/`
+4. collegare auth e query reali nelle schermate che oggi usano dati demo/locali
