@@ -6,7 +6,7 @@ import { Logo } from "@/components/logo";
 import { BeforeAfterSlider } from "@/components/before-after-slider";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { CameraCaptureButton } from "@/components/camera-capture-button";
-import heroDoctor from "@/assets/hero-doctor.jpg";
+import antonioMironeContact from "@/assets/antonio-mirone-contact.png";
 
 export const Route = createFileRoute("/try")({ component: TryPage });
 
@@ -164,14 +164,14 @@ function TryPage() {
             <div className="relative h-44 bg-muted md:h-auto md:min-h-full">
 
               <img
-                src={heroDoctor}
+                src={antonioMironeContact}
                 alt="Antonio Mirone"
                 className="h-full w-full object-cover"
                 loading="lazy"
               />
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-5 text-white">
                 <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/70">Antonio Mirone</div>
-                <div className="mt-1 font-display text-[28px] font-semibold">Studio whitening</div>
+                <div className="mt-1 font-display text-[28px] font-semibold">Dr. Antonio Mirone</div>
               </div>
             </div>
 
@@ -188,8 +188,17 @@ function TryPage() {
               <div className="mt-6 space-y-4">
                 <div className="rounded-2xl bg-muted/40 px-4 py-4">
                   <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Telefono</div>
-                  <a href="tel:+390815551234" className="mt-1 block font-display text-[24px] font-semibold text-foreground hover:text-primary">
-                    +39 081 555 1234
+                  <a href="tel:+393663570757" className="mt-1 block font-display text-[24px] font-semibold text-foreground hover:text-primary">
+                    +39 366 3570757
+                  </a>
+                </div>
+                <div className="rounded-2xl bg-muted/40 px-4 py-4">
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Email</div>
+                  <a
+                    href="mailto:dr.antoniomirone@gmail.com?subject=Richiesta%20consulenza%20whitening"
+                    className="mt-1 block text-[15px] font-medium text-foreground hover:text-primary"
+                  >
+                    dr.antoniomirone@gmail.com
                   </a>
                 </div>
                 <div className="rounded-2xl bg-muted/40 px-4 py-4">
@@ -198,13 +207,13 @@ function TryPage() {
                 </div>
                 <div className="flex flex-wrap gap-3 pt-2">
                   <a
-                    href="tel:+390815551234"
+                    href="tel:+393663570757"
                     className="inline-flex h-11 items-center justify-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground"
                   >
                     Chiama ora
                   </a>
                   <a
-                    href="mailto:info@studiomirone.it?subject=Richiesta%20consulenza%20whitening"
+                    href="mailto:dr.antoniomirone@gmail.com?subject=Richiesta%20consulenza%20whitening"
                     className="inline-flex h-11 items-center justify-center rounded-full border border-border/70 bg-card px-5 text-sm font-semibold text-foreground"
                   >
                     Scrivi email
