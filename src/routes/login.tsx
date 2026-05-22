@@ -35,22 +35,22 @@ function LoginPage() {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="w-full max-w-md rounded-[2rem] bg-card px-7 py-10 shadow-[0_30px_80px_-30px_rgba(2,8,23,0.18)] ring-1 ring-black/[0.03] md:px-10 md:py-12"
+          className="w-full max-w-xl rounded-[2rem] bg-card px-7 py-10 shadow-[0_30px_80px_-30px_rgba(2,8,23,0.18)] ring-1 ring-black/[0.03] md:px-10 md:py-12"
         >
           <div className="text-center">
             <div className="text-[12px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">SmileVision PRO</div>
-            <h1 className="mt-3 font-display text-[34px] font-semibold tracking-tight text-foreground">Welcome back</h1>
-            <p className="mt-2 text-[14px] text-muted-foreground">Precision dental diagnostics, powered by AI.</p>
+            <h1 className="mt-3 font-display text-[34px] font-semibold tracking-tight text-foreground">Bentornato</h1>
+            <p className="mt-2 text-[14px] text-muted-foreground">Accedi alla tua area clinica SmileVision Pro.</p>
           </div>
 
           <form onSubmit={submit} className="mt-9 space-y-5">
             <div className="space-y-1.5">
-              <label className="text-[13px] font-semibold text-foreground">Email address</label>
+              <label className="text-[13px] font-semibold text-foreground">Indirizzo email</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="dr.henderson@clinical.com"
+                placeholder="dr.antoniomirone@gmail.com"
                 className="h-12 w-full rounded-full bg-muted/60 px-5 text-[14px] text-foreground placeholder:text-muted-foreground/70 outline-none transition focus:bg-muted/80 focus:ring-2 focus:ring-ring/30"
                 autoComplete="email"
               />
@@ -59,7 +59,7 @@ function LoginPage() {
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
                 <label className="text-[13px] font-semibold text-foreground">Password</label>
-                <button type="button" className="text-[12px] font-medium text-muted-foreground hover:text-primary">Forgot password?</button>
+                <button type="button" className="text-[12px] font-medium text-muted-foreground hover:text-primary">Password dimenticata?</button>
               </div>
               <div className="relative">
                 <input
@@ -85,19 +85,15 @@ function LoginPage() {
               type="submit"
               className="group inline-flex h-13 w-full items-center justify-center gap-2 rounded-full bg-primary py-3.5 text-[14px] font-semibold text-primary-foreground transition hover:opacity-95"
             >
-              Continue <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+              Accedi <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
             </button>
           </form>
 
           <div className="my-7 flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-muted-foreground/70">
             <span className="h-px flex-1 bg-border" />
-            Secure login
+            Accesso protetto
             <span className="h-px flex-1 bg-border" />
           </div>
-
-          <p className="text-center text-[13px] text-muted-foreground">
-            Don't have an account? <button className="font-semibold text-foreground hover:text-primary">Request Access</button>
-          </p>
         </motion.div>
       </main>
 
@@ -112,18 +108,18 @@ function LoginPage() {
           <ShieldCheck className="h-4 w-4" />
         </div>
         <div className="leading-tight">
-          <div className="text-[12px] font-semibold text-foreground">256-bit AES Encryption</div>
-          <div className="text-[11px] text-muted-foreground">Your patient data remains fully private.</div>
+          <div className="text-[12px] font-semibold text-foreground">Crittografia AES a 256 bit</div>
+          <div className="text-[11px] text-muted-foreground">I dati dei pazienti restano riservati e protetti.</div>
         </div>
       </motion.div>
 
       <footer className="relative z-10 pb-6 text-center text-[11px] text-muted-foreground">
         <div className="mb-2 flex items-center justify-center gap-6 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground/70">
-          <span>Privacy policy</span>
-          <span>HIPAA compliance</span>
-          <span>Support</span>
+          <span>Privacy</span>
+          <span>Conformità</span>
+          <span>Supporto</span>
         </div>
-        © 2026 SmileVision PRO AI Dental Systems. All rights reserved.
+        © 2026 SmileVision PRO. Tutti i diritti riservati.
       </footer>
     </div>
   );
