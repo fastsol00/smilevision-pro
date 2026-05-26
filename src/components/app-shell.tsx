@@ -16,25 +16,20 @@ const NAV = [
 export function AppShell({ children, topBar }: { children: React.ReactNode; topBar?: React.ReactNode }) {
   const loc = useLocation();
   const user = useAuthStore((state) => state.user);
-  const storedPassword = useAuthStore((state) => state.password);
   const updateEmail = useAuthStore((state) => state.updateEmail);
   const updatePassword = useAuthStore((state) => state.updatePassword);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [emailDraft, setEmailDraft] = useState(user.email);
-  const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const resetSettingsFields = () => {
     const latestUser = getCurrentUser();
     setEmailDraft(latestUser.email);
-    setCurrentPassword("");
     setNewPassword("");
     setConfirmPassword("");
-    setShowCurrentPassword(false);
     setShowNewPassword(false);
     setShowConfirmPassword(false);
   };
@@ -63,10 +58,6 @@ export function AppShell({ children, topBar }: { children: React.ReactNode; topB
   };
 
   const savePassword = () => {
-    if (currentPassword !== storedPassword) {
-      toast.error("La password attuale non è corretta.");
-      return;
-    }
     if (newPassword.length < 8) {
       toast.error("La nuova password deve avere almeno 8 caratteri.");
       return;
@@ -76,7 +67,6 @@ export function AppShell({ children, topBar }: { children: React.ReactNode; topB
       return;
     }
     updatePassword(newPassword);
-    setCurrentPassword("");
     setNewPassword("");
     setConfirmPassword("");
     toast.success("Password aggiornata con successo.");
@@ -149,16 +139,18 @@ export function AppShell({ children, topBar }: { children: React.ReactNode; topB
       </nav>
 
       <Dialog open={settingsOpen} onOpenChange={handleOpenChange}>
-        <DialogContent className="sm:max-w-xl">
+        <DialogContent className="sm:max-w-xl rounded-[1.4rem] border border-border/70 p-0 shadow-[0_30px_80px_-35px_rgba(2,8,23,0.28)]">
           <DialogHeader>
-            <DialogTitle>Impostazioni account</DialogTitle>
-            <DialogDescription>
+            <div className="border-b border-border/60 px-6 pt-6 pb-4">
+              <DialogTitle>Impostazioni account</DialogTitle>
+              <DialogDescription className="mt-1">
               Aggiorna email e password. Le modifiche vengono salvate subito su questo dispositivo.
-            </DialogDescription>
+              </DialogDescription>
+            </div>
           </DialogHeader>
 
-          <div className="space-y-6">
-            <section className="space-y-3 rounded-2xl border border-border/60 bg-muted/30 p-4">
+          <div className="space-y-5 px-6 py-5">
+            <section className="space-y-3 rounded-[1.35rem] border border-border/60 bg-muted/25 p-4">
               <div>
                 <div className="text-sm font-semibold text-foreground">Email di accesso</div>
                 <div className="text-xs text-muted-foreground">Verrà usata immediatamente anche nella schermata di login.</div>
@@ -167,31 +159,23 @@ export function AppShell({ children, topBar }: { children: React.ReactNode; topB
                 type="email"
                 value={emailDraft}
                 onChange={(e) => setEmailDraft(e.target.value)}
-                className="h-11 rounded-xl bg-background"
+                className="h-11 rounded-[0.95rem] bg-background"
                 placeholder="nome@studio.it"
                 autoComplete="email"
               />
               <div className="flex justify-end">
-                <Button type="button" onClick={saveEmail} className="rounded-full">
+                <Button type="button" onClick={saveEmail} className="rounded-[0.95rem]">
                   Salva email
                 </Button>
               </div>
             </section>
 
-            <section className="space-y-3 rounded-2xl border border-border/60 bg-muted/30 p-4">
+            <section className="space-y-3 rounded-[1.35rem] border border-border/60 bg-muted/25 p-4">
               <div>
                 <div className="text-sm font-semibold text-foreground">Password</div>
-                <div className="text-xs text-muted-foreground">Per confermare la modifica inserisci la password attuale.</div>
+                <div className="text-xs text-muted-foreground">Imposta una nuova password e confermala qui sotto.</div>
               </div>
 
-              <PasswordField
-                label="Password attuale"
-                value={currentPassword}
-                onChange={setCurrentPassword}
-                visible={showCurrentPassword}
-                onToggleVisibility={() => setShowCurrentPassword((value) => !value)}
-                autoComplete="current-password"
-              />
               <PasswordField
                 label="Nuova password"
                 value={newPassword}
@@ -210,7 +194,7 @@ export function AppShell({ children, topBar }: { children: React.ReactNode; topB
               />
 
               <DialogFooter className="pt-1">
-                <Button type="button" onClick={savePassword} className="rounded-full">
+                <Button type="button" onClick={savePassword} className="rounded-[0.95rem]">
                   Aggiorna password
                 </Button>
               </DialogFooter>
@@ -247,7 +231,7 @@ function PasswordField({
           type={visible ? "text" : "password"}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="h-11 rounded-xl bg-background pr-11"
+          className="h-11 rounded-[0.95rem] bg-background pr-11"
           autoComplete={autoComplete}
         />
         <button

@@ -1,5 +1,5 @@
 export type ShadeColor = "B1" | "A1" | "B2" | "A2" | "A3";
-export const SHADES: ShadeColor[] = ["B1", "A1", "B2", "A2", "A3"];
+export const SHADES: ShadeColor[] = ["B1", "B2", "A1", "A2", "A3"];
 
 export type Sensitivity = "Assente" | "Lieve" | "Moderata" | "Alta";
 export const SENSITIVITIES: Sensitivity[] = ["Assente", "Lieve", "Moderata", "Alta"];

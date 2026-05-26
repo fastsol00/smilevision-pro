@@ -14,17 +14,15 @@ function Landing() {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="mx-auto grid max-w-7xl overflow-hidden rounded-[2rem] bg-card shadow-[0_30px_80px_-30px_rgba(2,8,23,0.18)] md:rounded-[2.5rem] md:grid-cols-[1.05fr_1fr]"
+        className="mx-auto grid max-w-7xl overflow-hidden rounded-[2rem] bg-card shadow-[0_30px_80px_-30px_rgba(2,8,23,0.18)] md:min-h-[760px] md:rounded-[2.5rem] md:grid-cols-[1.05fr_1fr]"
       >
         {/* LEFT */}
-        <div className="relative flex flex-col p-5 md:p-12">
+        <div className="relative flex flex-col p-5 md:min-h-[760px] md:p-12">
           <div className="flex items-center justify-between">
             <Logo />
           </div>
-
-
-          <div className="mt-10 md:mt-20">
-            <h1 className="font-display text-[34px] leading-[1.05] tracking-[-0.02em] text-primary sm:text-[40px] md:text-[64px]">
+          <div className="mt-12 max-w-[42rem] md:mt-0 md:flex md:flex-1 md:flex-col md:justify-center">
+            <h1 className="font-display text-[36px] leading-[1.03] tracking-tight text-primary sm:text-[44px] md:text-[68px]">
               Avere cura del<br />
               <span className="font-serif italic font-medium" style={{ fontFamily: "'Instrument Serif', 'Hanken Grotesk', serif" }}>
                 Tuo Sorriso,
@@ -32,17 +30,21 @@ function Landing() {
               una visita alla volta.
             </h1>
 
-            <div className="mt-7 flex flex-wrap items-center gap-3">
+            <p className="mt-5 max-w-[31rem] text-[14px] leading-relaxed text-muted-foreground md:text-[16px]">
+              Scopri in pochi secondi una simulazione realistica del tuo sorriso
+              e capisci subito se il risultato che desideri vale una valutazione clinica.
+            </p>
+
+            <div className="mt-10 flex flex-wrap items-center gap-3 md:mt-16">
               <Link
                 to="/try"
-                className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-[15px] font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5"
               >
                 Prova ora <ArrowUpRight className="h-4 w-4" />
               </Link>
-              <span className="text-[11px] text-muted-foreground md:text-xs">Carica il tuo selfie · nessuna registrazione</span>
+              <span className="text-[12px] text-muted-foreground md:text-[14px]">Carica il tuo selfie · nessuna registrazione</span>
             </div>
           </div>
-
         </div>
 
         {/* RIGHT */}

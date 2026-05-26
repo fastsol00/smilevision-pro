@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { getWhiteningFilter } from "@/lib/whitening";
 
 interface Props {
   beforeSrc: string;
@@ -31,9 +32,7 @@ export function BeforeAfterSlider({
   const useSame = sameSource || !afterSrc;
   const realAfter = useSame ? beforeSrc : afterSrc!;
 
-  const whitenFilter = useSame
-    ? `brightness(${1 + 0.16 * intensity}) contrast(${1 + 0.07 * intensity}) saturate(${1 - 0.32 * intensity}) hue-rotate(${-5 * intensity}deg)`
-    : undefined;
+  const whitenFilter = useSame ? getWhiteningFilter(intensity) : undefined;
 
   const move = (clientX: number) => {
     const r = ref.current?.getBoundingClientRect();

@@ -34,9 +34,8 @@ function buildFilename(patient: Patient): string {
 }
 
 /**
- * Renders the given DOM element to a multi-page A4 PDF.
- * Returns the jsPDF instance, a Blob, and an object URL for previewing in an iframe.
- * The caller is responsible for revoking the object URL when done.
+ * Renders the given DOM element to a single-page A4 PDF.
+ * The captured layout is scaled down as needed to fit the page cleanly.
  */
 export async function generateCasePdfFromElement(
   element: HTMLElement,
@@ -67,20 +66,16 @@ export async function generateCasePdfFromElement(
   const pdf = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait", compress: true });
   const pageW = pdf.internal.pageSize.getWidth();
   const pageH = pdf.internal.pageSize.getHeight();
-  const imgW = pageW;
-  const imgH = (canvas.height * imgW) / canvas.width;
+  const margin = 8;
+  const maxW = pageW - margin * 2;
+  const maxH = pageH - margin * 2;
+  const scale = Math.min(maxW / canvas.width, maxH / canvas.height);
+  const imgW = canvas.width * scale;
+  const imgH = canvas.height * scale;
+  const offsetX = (pageW - imgW) / 2;
+  const offsetY = (pageH - imgH) / 2;
 
-  let heightLeft = imgH;
-  let position = 0;
-  pdf.addImage(imgData, "JPEG", 0, position, imgW, imgH);
-  heightLeft -= pageH;
-
-  while (heightLeft > 0) {
-    position = heightLeft - imgH;
-    pdf.addPage();
-    pdf.addImage(imgData, "JPEG", 0, position, imgW, imgH);
-    heightLeft -= pageH;
-  }
+  pdf.addImage(imgData, "JPEG", offsetX, offsetY, imgW, imgH);
 
   const filename = buildFilename(patient);
   const blob = pdf.output("blob");

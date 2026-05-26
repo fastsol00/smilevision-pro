@@ -14,6 +14,7 @@ import { SHADES, SENSITIVITIES } from "@/lib/types";
 import type { ShadeColor, Sensitivity } from "@/lib/types";
 import { generateCasePdfFromElement, downloadPdf, type GeneratedPdf } from "@/lib/pdf";
 import { CasePdfTemplate } from "@/components/case-pdf-template";
+import { getShadeWhiteningIntensity } from "@/lib/whitening";
 import { Plus, Sparkles, FileDown, Save, Upload, AlertTriangle, Camera } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
@@ -58,6 +59,7 @@ function Page() {
     () => findProtocol({ targetShade: shade, smoker, sensitivity: sens, tetracycline: tetra }),
     [shade, smoker, sens, tetra],
   );
+  const whiteningIntensity = useMemo(() => getShadeWhiteningIntensity(shade), [shade]);
 
   const onPhoto = (f: File) => {
     const reader = new FileReader();
@@ -267,7 +269,7 @@ function Page() {
         </div>
 
         {photo ? (
-          <BeforeAfterSlider beforeSrc={photo} sameSource intensity={0.75} />
+          <BeforeAfterSlider beforeSrc={photo} sameSource intensity={whiteningIntensity} />
         ) : (
           <div className="grid min-h-[360px] place-items-center rounded-[1.5rem] border-2 border-dashed border-border/80 bg-muted/25 px-6 py-10 text-center">
             <div className="max-w-md">

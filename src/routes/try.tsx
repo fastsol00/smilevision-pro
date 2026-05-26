@@ -161,12 +161,12 @@ function TryPage() {
       <Dialog open={contactOpen} onOpenChange={setContactOpen}>
         <DialogContent className="max-w-3xl max-h-[92vh] overflow-y-auto p-0">
           <div className="grid md:grid-cols-[0.92fr_1.08fr]">
-            <div className="relative h-44 bg-muted md:h-auto md:min-h-full">
+            <div className="relative h-60 bg-muted md:h-auto md:min-h-full">
 
               <img
                 src={antonioMironeContact}
                 alt="Antonio Mirone"
-                className="h-full w-full object-cover"
+                className="h-full w-full object-cover object-[center_14%] md:object-[center_20%]"
                 loading="lazy"
               />
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-5 text-white">
@@ -175,7 +175,7 @@ function TryPage() {
               </div>
             </div>
 
-            <div className="p-6 md:p-8">
+            <div className="flex min-h-full flex-col p-6 md:p-8">
               <DialogHeader className="text-left">
                 <DialogTitle className="font-display text-[28px] font-semibold text-foreground">
                   Contatta lo studio
@@ -185,7 +185,8 @@ function TryPage() {
                 </DialogDescription>
               </DialogHeader>
 
-              <div className="mt-6 space-y-4">
+              <div className="mt-6 flex flex-1 flex-col">
+                <div className="space-y-4">
                 <div className="rounded-2xl bg-muted/40 px-4 py-4">
                   <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Telefono</div>
                   <a href="tel:+393663570757" className="mt-1 block font-display text-[24px] font-semibold text-foreground hover:text-primary">
@@ -205,7 +206,8 @@ function TryPage() {
                   <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Indirizzo studio</div>
                   <div className="mt-1 text-[15px] font-medium text-foreground">Via Toledo 145, Napoli</div>
                 </div>
-                <div className="flex flex-wrap gap-3 pt-2">
+                </div>
+                <div className="mt-8 flex flex-wrap gap-3 pt-2 md:mt-auto md:pt-6">
                   <a
                     href="tel:+393663570757"
                     className="inline-flex h-11 items-center justify-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground"

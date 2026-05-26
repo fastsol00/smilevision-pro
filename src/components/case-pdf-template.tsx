@@ -1,6 +1,7 @@
 import { forwardRef } from "react";
 import type { Patient, ClinicalCase } from "@/lib/types";
 import { DEFAULT_LIFESTYLE } from "@/lib/types";
+import { getShadeWhiteningIntensity, getWhiteningFilter } from "@/lib/whitening";
 import {
   Cigarette, Coffee, AlertTriangle, Sparkles, Droplet, BadgeCheck,
   Wine, Dumbbell, Zap, Pill, CalendarClock, Calendar,
@@ -26,18 +27,18 @@ export const CasePdfTemplate = forwardRef<HTMLDivElement, Props>(function CasePd
   const generated = new Date(c.createdAt).toLocaleDateString("it-IT", {
     day: "2-digit", month: "long", year: "numeric",
   });
-  const whitenFilter = `brightness(1.135) contrast(1.06) saturate(0.7375) hue-rotate(-4.5deg)`;
+  const whitenFilter = getWhiteningFilter(getShadeWhiteningIntensity(c.targetShade));
 
   return (
     <div
       ref={ref}
       style={{ width: "794px", fontFamily: "Inter, system-ui, sans-serif", color: "#0a1430" }}
-      className="bg-white p-10"
+      className="bg-white p-8"
     >
       {/* HEADER */}
       <div
         style={{ background: "linear-gradient(135deg, #041632 0%, #1d3a73 100%)" }}
-        className="rounded-3xl px-7 py-6 text-white"
+        className="rounded-3xl px-6 py-5 text-white"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -55,8 +56,8 @@ export const CasePdfTemplate = forwardRef<HTMLDivElement, Props>(function CasePd
       </div>
 
       {/* PATIENT TOP CARD */}
-      <div className="mt-5 rounded-3xl border border-slate-200 bg-white px-6 py-5 shadow-sm">
-        <div className="flex flex-wrap items-center gap-5">
+      <div className="mt-4 rounded-3xl border border-slate-200 bg-white px-5 py-4 shadow-sm">
+        <div className="flex flex-wrap items-center gap-4">
           <div className="grid h-16 w-16 place-items-center rounded-full bg-blue-50 text-[18px] font-semibold text-blue-700 ring-1 ring-slate-200">
             {patient.firstName[0]}{patient.lastName[0]}
           </div>
@@ -91,9 +92,9 @@ export const CasePdfTemplate = forwardRef<HTMLDivElement, Props>(function CasePd
       </div>
 
       {/* TWO COLUMN */}
-      <div className="mt-5 grid grid-cols-5 gap-5">
+      <div className="mt-4 grid grid-cols-5 gap-4">
         {/* LEFT */}
-        <div className="col-span-3 space-y-5">
+        <div className="col-span-3 space-y-4">
           {/* Anamnesi */}
           <Section title="Anamnesi clinica">
             <DataRow label="Colore target" value={c.targetShade} />
@@ -107,7 +108,7 @@ export const CasePdfTemplate = forwardRef<HTMLDivElement, Props>(function CasePd
             <Section title="Simulazione prima / dopo">
               <div className="grid grid-cols-2 gap-3">
                 <div className="relative overflow-hidden rounded-2xl bg-slate-100">
-                  <img src={c.photo} alt="Prima" className="block h-44 w-full object-cover" crossOrigin="anonymous" />
+                  <img src={c.photo} alt="Prima" className="block h-40 w-full object-cover" crossOrigin="anonymous" />
                   <div className="absolute left-3 top-3 rounded-full bg-black/65 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-white">Prima</div>
                 </div>
                 <div className="relative overflow-hidden rounded-2xl bg-slate-100">
@@ -115,7 +116,7 @@ export const CasePdfTemplate = forwardRef<HTMLDivElement, Props>(function CasePd
                     src={c.photo}
                     alt="Dopo"
                     crossOrigin="anonymous"
-                    className="block h-44 w-full object-cover"
+                    className="block h-40 w-full object-cover"
                     style={{ filter: whitenFilter }}
                   />
                   <div className="absolute right-3 top-3 rounded-full bg-white/95 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-blue-700">Dopo</div>
@@ -154,7 +155,7 @@ export const CasePdfTemplate = forwardRef<HTMLDivElement, Props>(function CasePd
         </div>
 
         {/* RIGHT - Lifestyle */}
-        <div className="col-span-2 space-y-5">
+        <div className="col-span-2 space-y-4">
           <Section title="Fattori lifestyle">
             <div className="space-y-2.5">
               {lifestyle.map((it, i) => (
@@ -194,7 +195,7 @@ export const CasePdfTemplate = forwardRef<HTMLDivElement, Props>(function CasePd
         </div>
       </div>
 
-      <div className="mt-6 border-t border-slate-200 pt-3 text-[10px] italic text-slate-500">
+      <div className="mt-4 border-t border-slate-200 pt-3 text-[10px] italic text-slate-500">
         Disclaimer: la simulazione e il protocollo hanno finalità illustrative e non rappresentano garanzia di risultato clinico.
         Documento generato da SmileVision PRO — Dr. Antonio Mirone, Igienista Dentale.
       </div>
@@ -204,8 +205,8 @@ export const CasePdfTemplate = forwardRef<HTMLDivElement, Props>(function CasePd
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-      <h3 className="mb-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">{title}</h3>
+    <section className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
+      <h3 className="mb-2.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">{title}</h3>
       {children}
     </section>
   );
